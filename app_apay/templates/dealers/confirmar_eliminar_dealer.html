@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>¿Estás seguro de eliminar este Dealer?</h2>
+    <p><strong>DNI:</strong> {{ dealer.dni }}</p>
+    <p><strong>Nombres:</strong> {{ dealer.nombres }}</p>
+    <p><strong>Apellidos:</strong> {{ dealer.apellidos }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="{% url 'listar_dealers' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

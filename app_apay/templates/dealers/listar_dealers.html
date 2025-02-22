@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Bienvenido al Panel de Control</h2>
+    <p>Hola, {{ request.user.username }}. ¡Has iniciado sesión correctamente!</p>
+    <!-- Botón para cerrar sesión -->
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Cerrar sesión</button>
+    </form>
+    <h2>Lista de Dealers</h2>
+    <a href="{% url 'registrar_dealer' %}" class="btn btn-primary mb-3">Registrar Nuevo Dealer</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>DNI</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Placa</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dealer in dealers %}
+            <tr>
+                <td>{{ dealer.dni }}</td>
+                <td>{{ dealer.nombres }}</td>
+                <td>{{ dealer.apellidos }}</td>
+                <td>{{ dealer.placa }}</td>
+                <td>{{ dealer.estado }}</td>
+                <td>
+                    <a href="{% url 'editar_dealer' dealer.id %}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{% url 'eliminar_dealer' dealer.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</div>
+{% endblock %}
