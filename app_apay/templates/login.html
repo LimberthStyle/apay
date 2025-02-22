@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="login-container">
+    <h2>Iniciar Sesión</h2>
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="Nombre de usuario" required>  <!-- Campo username -->
+        <input type="password" name="password" placeholder="Contraseña" required>  <!-- Campo password -->
+        <button type="submit">Entrar</button>
+        {% if error %}
+            <p style="color: red;">{{ error }}</p>
+        {% endif %}
+    </form>
+
+    <!-- Botón para redirigir a la página de registro -->
+    <p>¿No tienes una cuenta? <a href="{% url 'register' %}">Regístrate aquí</a></p>
+</div>
+{% endblock %}
