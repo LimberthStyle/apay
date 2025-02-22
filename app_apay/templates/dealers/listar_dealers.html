@@ -1,19 +1,19 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
 <div class="container">
-    <h2>Bienvenido al Panel de Control</h2>
-    <p>Hola, {{ request.user.username }}. ¡Has iniciado sesión correctamente!</p>
-    <!-- Botón para cerrar sesión -->
-    <form action="{% url 'logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Cerrar sesión</button>
-    </form>
-    <h2>Lista de Dealers</h2>
-    <a href="{% url 'registrar_dealer' %}" class="btn btn-primary mb-3">Registrar Nuevo Dealer</a>
-    <table class="table table-bordered">
-        <thead>
+    <h2 class="text-center mb-4">Lista de Repartidores</h2>
+    <a href="{% url 'dashboard' %}" class="btn btn-primary mb-3">
+     Atras
+    </a>
+    <a href="{% url 'registrar_dealer' %}" class="btn btn-primary mb-3">
+        <i class="fas fa-plus"></i> Registrar Nuevo Repartidor
+    </a>
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
             <tr>
                 <th>DNI</th>
+                <th>Fotocheck</th>
                 <th>Nombres</th>
                 <th>Apellidos</th>
                 <th>Placa</th>
@@ -25,18 +25,32 @@
             {% for dealer in dealers %}
             <tr>
                 <td>{{ dealer.dni }}</td>
+                <td>
+                    {% if dealer.fotocheck %}
+                        <img src="{{ dealer.fotocheck.url }}" alt="Fotocheck de {{ dealer.nombres }}" class="img-thumbnail" style="width: 100px; height: auto;">
+                    {% else %}
+                        <span class="text-muted">Sin imagen</span>
+                    {% endif %}
+                </td>
                 <td>{{ dealer.nombres }}</td>
                 <td>{{ dealer.apellidos }}</td>
                 <td>{{ dealer.placa }}</td>
-                <td>{{ dealer.estado }}</td>
                 <td>
-                    <a href="{% url 'editar_dealer' dealer.id %}" class="btn btn-warning btn-sm">Editar</a>
-                    <a href="{% url 'eliminar_dealer' dealer.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                    <span class="badge {% if dealer.estado == 'DISPONIBLE' %}badge-success{% else %}badge-warning{% endif %}">
+                        {{ dealer.estado }}
+                    </span>
+                </td>
+                <td>
+                    <a href="{% url 'editar_dealer' dealer.id %}" class="btn btn-warning btn-sm">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                    <a href="{% url 'eliminar_dealer' dealer.id %}" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </a>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    
 </div>
 {% endblock %}
