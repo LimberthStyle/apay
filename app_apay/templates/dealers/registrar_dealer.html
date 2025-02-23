@@ -1,12 +1,36 @@
 {% extends "base.html" %}
+{% block title %}Registrar Nuevo Dealer{% endblock %}
 {% block content %}
-<div class="container">
-    <h2>Registrar Nuevo Dealer</h2>
-    <form method="post" enctype="multipart/form-data">
+<div class="container mt-5" style="max-width: 700px; margin: 50px auto; padding: 20px; background-color: #ffffff; box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); border-radius: 10px;">
+    <h2 class="text-center mb-4" style="text-align: center; color: #007bff;">Registrar Nuevo Dealer</h2>
+    <form method="post" enctype="multipart/form-data" class="p-4 bg-light rounded shadow">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-success">Guardar</button>
-        <a href="{% url 'listar_dealers' %}" class="btn btn-secondary">Cancelar</a>
+        <div class="mb-3">
+            <label for="dni" class="form-label" style="font-weight: bold;">DNI</label>
+            {{ form.dni }}
+        </div>
+        <div class="mb-3">
+            <label for="nombres" class="form-label" style="font-weight: bold;">Nombres</label>
+            {{ form.nombres }}
+        </div>
+        <div class="mb-3">
+            <label for="apellidos" class="form-label" style="font-weight: bold;">Apellidos</label>
+            {{ form.apellidos }}
+        </div>
+        <div class="mb-3">
+            <label for="placa" class="form-label" style="font-weight: bold;">Placa</label>
+            {{ form.placa }}
+        </div>
+        <div class="mb-3">
+            <label for="estado" class="form-label" style="font-weight: bold;">Estado</label>
+            {{ form.estado }}
+        </div>
+        <div class="mb-3">
+            <label for="fotocheck" class="form-label" style="font-weight: bold;">Fotocheck</label>
+            {{ form.fotocheck }}
+        </div>
+        <button type="submit" class="btn btn-success w-100 mb-2" style="width: 100%; padding: 12px; margin-top: 10px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; background-color: #28a745; color: #fff;">Guardar</button>
+        <a href="{% url 'listar_dealers' %}" class="btn btn-secondary w-100" style="width: 100%; padding: 12px; margin-top: 10px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; background-color: #6c757d; color: #fff; text-align: center; text-decoration: none; display: block;">Cancelar</a>
     </form>
 </div>
 {% endblock %}
