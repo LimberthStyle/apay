@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard-container">
+    <h2>Crear Pedido</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <h3>Detalles del Pedido</h3>
+        {{ detalle_formset.management_form }}
+        {% for form in detalle_formset %}
+            <div class="detalle-form">
+                {{ form.as_p }}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Seleccionar todos los campos de producto
+    const productoFields = document.querySelectorAll('[id^="id_form-"][id$="-producto"]');
+
+    productoFields.forEach(function(productoField) {
+        productoField.addEventListener('change', function() {
+            const productoId = this.value;
+            const formPrefix = this.id.split('-')[1];
+            const precioUnitarioField = document.querySelector(`#id_form-${formPrefix}-precio_unitario`);
+
+            if (productoId) {
+                // Obtener el precio del producto mediante una solicitud AJAX
+                fetch(`/get-producto-details/${productoId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        precioUnitarioField.value = data.precio;  // Llenar el campo precio_unitario
+                    });
+            } else {
+                precioUnitarioField.value = '';  // Limpiar el campo si no se selecciona un producto
+            }
+        });
+    });
+
+    // Habilitar campos deshabilitados antes de enviar el formulario
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function() {
+        const precioUnitarioFields = document.querySelectorAll('[id^="id_form-"][id$="-precio_unitario"]');
+        precioUnitarioFields.forEach(function(field) {
+            field.disabled = false;  // Habilitar el campo antes de enviar el formulario
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard-container">
+    <h2>Editar Pedido</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <h3>Detalles del Pedido</h3>
+        {{ detalle_formset.management_form }}
+        {% for form in detalle_formset %}
+            <div class="detalle-form">
+                {{ form.as_p }}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+</div>
+{% endblock %}

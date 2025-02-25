@@ -9,7 +9,27 @@
         <div class="card-body">
             <h5 class="card-title">Gestionar Dealers</h5>
             <a href="{% url 'listar_dealers' %}" class="btn btn-primary">Ver Dealers</a>
-            
+
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Gestionar Pedidos</h5>
+            <a href="{% url 'listar_pedidos' %}" class="btn btn-primary">Ver Pedidos</a>
+            <a href="{% url 'crear_pedido' %}" class="btn btn-success">Crear Pedido</a>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Gestionar Clientes</h5>
+            <a href="{% url 'listar_clientes' %}" class="btn btn-primary">Ver Clientes</a>
+            <a href="{% url 'crear_cliente' %}" class="btn btn-success">Crear Cliente</a>
+        </div>
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-body">
+            <h5 class="card-title">Gestionar Productos</h5>
+            <a href="{% url 'listar_productos' %}" class="btn btn-primary">Ver Productos</a>
+            <a href="{% url 'crear_producto' %}" class="btn btn-success">Crear Producto</a>
         </div>
     </div>
 
