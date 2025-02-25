@@ -116,45 +116,43 @@ class CrearPedido(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            context['detalle_formset'] = DetallePedidoFormSet(self.request.POST)
-        else:
-            context['detalle_formset'] = DetallePedidoFormSet()
+        context['productos'] = Producto.objects.all()  # Enviar productos al template
         return context
 
     def form_valid(self, form):
-        context = self.get_context_data()
-        detalle_formset = context['detalle_formset']
+        producto_id = self.request.POST.get('producto')
+        cantidad = int(self.request.POST.get('cantidad', 1))
+        precio_unitario = float(self.request.POST.get('precio_unitario', 0))
 
-        if detalle_formset.is_valid():
-            self.object = form.save(commit=False)
-            self.object.costo_total = 5.00  # Iniciar con el costo de delivery
-            self.object.save()
+        if not producto_id or precio_unitario == 0:
+            return self.render_to_response(self.get_context_data(form=form))
 
-            # Calcular el costo total de los productos
-            for detalle_form in detalle_formset:
-                detalle = detalle_form.save(commit=False)
-                detalle.pedido = self.object
+        self.object = form.save(commit=False)
+        self.object.costo_total = cantidad * precio_unitario + 5.00  # Costo total + delivery
+        self.object.save()
 
-                # Si `precio_unitario` está vacío, asignar un valor predeterminado
-                if detalle.precio_unitario is None:
-                    detalle.precio_unitario = 0.00  
+        # Guardar detalle del pedido
+        producto = Producto.objects.get(id=producto_id)
+        detalle = DetallePedido.objects.create(
+            pedido=self.object,
+            producto=producto,
+            cantidad=cantidad,
+            precio_unitario=precio_unitario
+        )
 
-                detalle.save()
-                self.object.costo_total += detalle.cantidad * detalle.precio_unitario
+        # Cambiar el estado del repartidor
+        if self.object.dealer:
+            self.object.dealer.estado = 'OCUPADO'
+            self.object.dealer.save()
 
-            self.object.save()
-
-            # Cambiar el estado del repartidor a "OCUPADO"
-            if self.object.dealer:
-                self.object.dealer.estado = 'OCUPADO'
-                self.object.dealer.save()
-
-            return redirect(self.success_url)
-
-        return self.render_to_response(self.get_context_data(form=form))
+        return redirect(self.success_url)
     
-
+def obtener_precio_producto(request, producto_id):
+    try:
+        producto = Producto.objects.get(id=producto_id)
+        return JsonResponse({'precio': float(producto.precio)})
+    except Producto.DoesNotExist:
+        return JsonResponse({'error': 'Producto no encontrado'}, status=404)
 # Actualizar un pedido
 class ActualizarPedido(UpdateView):
     model = Pedido

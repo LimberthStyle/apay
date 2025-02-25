@@ -24,6 +24,7 @@ urlpatterns = [
     path('pedidos/crear/', views.CrearPedido.as_view(), name='crear_pedido'),
     path('pedidos/editar/<int:pk>/', views.ActualizarPedido.as_view(), name='actualizar_pedido'),
     path('pedidos/eliminar/<int:pk>/', views.EliminarPedido.as_view(), name='eliminar_pedido'),
+    path('api/producto/<int:producto_id>/precio/', views.obtener_precio_producto, name='obtener_precio_producto'),
     # URLs para clientes
     path('clientes/', views.ListarClientes.as_view(), name='listar_clientes'),
     path('clientes/crear/', views.CrearCliente.as_view(), name='crear_cliente'),

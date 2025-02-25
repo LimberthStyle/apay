@@ -51,16 +51,15 @@ class DetallePedidoForm(forms.ModelForm):
         model = DetallePedido
         fields = ['producto', 'cantidad', 'precio_unitario']
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['precio_unitario'].widget.attrs['disabled'] = True  # Usar 'disabled' en lugar de 'readonly'
-        self.fields['precio_unitario'].required = False  # No es obligatorio (se llenará automáticamente)
-# FormSet para DetallePedido
+    precio_unitario = forms.DecimalField(
+        max_digits=10, decimal_places=2, required=False,
+        widget=forms.TextInput(attrs={'readonly': 'readonly'})  # Campo solo lectura
+    )
 DetallePedidoFormSet = inlineformset_factory(
-    Pedido,  # Modelo principal
-    DetallePedido,  # Modelo relacionado
-    form=DetallePedidoForm,  # Formulario personalizado
-    extra=1,  # Número de formularios vacíos que se mostrarán
+    Pedido, DetallePedido,  # Relación entre Pedido y DetallePedido
+    form=DetallePedidoForm,
+    extra=1,  # Número de formularios vacíos adicionales
+    can_delete=True  # Permitir eliminar detalles de pedidos
 )
 #CLIENTES-----------------------------------------------------------------
 
